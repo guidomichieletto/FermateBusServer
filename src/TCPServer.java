@@ -17,13 +17,12 @@ public class TCPServer extends Thread {
             System.out.println("Server started at port " + this.port);
 
             while(true) {
-                try(Socket socket = ss.accept()) {
-                    System.out.println("Accepted new connection: " + socket);
+                Socket socket = ss.accept();
+                System.out.println("Accepted new connection: " + socket);
 
-                    TCPServerConnection connection = new TCPServerConnection(socket);
-                    connection.start();
-                    connections.add(connection);
-                }
+                TCPServerConnection connection = new TCPServerConnection(socket);
+                connection.start();
+                connections.add(connection);
             }
         } catch (IOException ex) {
 
