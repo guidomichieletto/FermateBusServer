@@ -16,33 +16,38 @@ public class DataImport {
             float lat = Float.parseFloat(fields[6].substring(0, 2) + "," + fields[6].substring(3));
 
             Main.fermate.add(new Fermata(
-                    fields[0],
-                    fields[1],
-                    fields[2],
+                    getComune(fields[0]),
+                    getProvincia(fields[1]),
+                    getRegione(fields[2]),
                     fields[3],
                     Integer.parseInt(fields[4]),
                     lon,
                     lat
             ));
-
-            aggiungiComune(fields[0]);
-            aggiungiProvincia(fields[1]);
-            aggiungiRegione(fields[2]);
         }
     }
 
-    private static void aggiungiComune(String nome) {
-        if(Main.comuni.contains(nome)) return;
-        Main.comuni.add(nome);
+    private static Comune getComune(String nome) {
+        if(Main.comuni.containsKey(nome)) return Main.comuni.get(nome);
+        Comune comune = new Comune(nome);
+        Main.comuni.put(nome, comune);
+
+        return comune;
     }
 
-    private static void aggiungiProvincia(String nome) {
-        if(Main.province.contains(nome)) return;
-        Main.province.add(nome);
+    private static Provincia getProvincia(String nome) {
+        if(Main.province.containsKey(nome)) return Main.province.get(nome);
+        Provincia provincia = new Provincia(nome);
+        Main.province.put(nome, provincia);
+
+        return provincia;
     }
 
-    private static void aggiungiRegione(String nome) {
-        if(Main.regioni.contains(nome)) return;
-        Main.regioni.add(nome);
+    private static Regione getRegione(String nome) {
+        if(Main.regioni.containsKey(nome)) return Main.regioni.get(nome);
+        Regione regione = new Regione(nome);
+        Main.regioni.put(nome, regione);
+
+        return regione;
     }
 }
