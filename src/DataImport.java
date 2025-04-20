@@ -1,10 +1,10 @@
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class DataImport {
     public static void loadData(String fileName) throws FileNotFoundException {
-        Scanner rowScanner = new Scanner(new File(fileName));
+        Scanner rowScanner = new Scanner(new FileInputStream(fileName));
 
         // Salto la prima riga di intestazione
         rowScanner.nextLine();
@@ -12,15 +12,16 @@ public class DataImport {
         while(rowScanner.hasNextLine()) {
             String[] fields = rowScanner.nextLine().split(";");
 
-            float lon = Float.parseFloat(fields[5].substring(0, 2) + "," + fields[5].substring(3));
-            float lat = Float.parseFloat(fields[6].substring(0, 2) + "," + fields[6].substring(3));
+            if(fields.length != 7) continue;
+            float lon = Float.parseFloat(fields[5]);
+            float lat = Float.parseFloat(fields[6]);
 
             Main.fermate.add(new Fermata(
                     getComune(fields[0]),
                     getProvincia(fields[1]),
                     getRegione(fields[2]),
                     fields[3],
-                    Integer.parseInt(fields[4]),
+                    Long.parseLong(fields[4]),
                     lon,
                     lat
             ));
