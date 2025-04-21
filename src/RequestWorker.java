@@ -7,14 +7,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class RequestWorker extends Thread {
-    private String command;
-    private PrintWriter out;
+    private final String command;
+    private final TCPServerConnection con;
     private JSONObject request;
     private JSONObject response;
 
-    public RequestWorker(String command, PrintWriter out) {
+    public RequestWorker(String command, TCPServerConnection con) {
         this.command = command;
-        this.out = out;
+        this.con = con;
         response = new JSONObject();
     }
 
@@ -40,7 +40,7 @@ public class RequestWorker extends Thread {
                 default -> errorResponse("richiesta non valida");
             }
 
-            out.println(response);
+            con.sendMessage(response.toString());
         } catch (JSONException ex) {
             errorResponse(ex.getMessage());
         }
@@ -48,7 +48,6 @@ public class RequestWorker extends Thread {
 
     private void ping() {
         response.put("response", "pong");
-        out.println(response);
     }
 
     private void query() {
@@ -70,7 +69,7 @@ public class RequestWorker extends Thread {
         JSONArray list = new JSONArray();
 
         if(request.has("comune")) {
-            System.out.println(Main.comuni.get(request.getString("comune")));
+            System.out.println(Main.comuni.get(request.getString("comune")).nome);
             for(Fermata fermata : Main.comuni.get(request.getString("comune")).getFermate()) {
                 list.put(fermata.jsonObject());
             }
@@ -80,7 +79,7 @@ public class RequestWorker extends Thread {
             }
         }
 
-        response.put("response", "list");
+        response.put("response", "fermate");
         response.put("list", list);
     }
 
@@ -103,13 +102,12 @@ public class RequestWorker extends Thread {
             }
         }
 
-        response.put("response", "list");
+        response.put("response", "comuni");
         response.put("list", list);
     }
 
     private void queryProvince() {
         JSONArray list = new JSONArray();
-        HashMap<String, String> where = parseWhere();
 
         if(request.has("regione")) {
             for(Provincia provincia : Main.regioni.get(request.getString("regione")).getProvince().values()) {
@@ -121,7 +119,7 @@ public class RequestWorker extends Thread {
             }
         }
 
-        response.put("response", "list");
+        response.put("response", "province");
         response.put("list", list);
     }
 
@@ -132,7 +130,7 @@ public class RequestWorker extends Thread {
             list.put(regione.nome);
         }
 
-        response.put("response", "list");
+        response.put("response", "regioni");
         response.put("list", list);
     }
 
@@ -164,6 +162,5 @@ public class RequestWorker extends Thread {
     private void errorResponse(String description) {
         response.put("response", "error");
         response.put("description", description);
-        out.println(response);
     }
 }
