@@ -16,15 +16,24 @@ public class DataImport {
             float lon = Float.parseFloat(fields[5]);
             float lat = Float.parseFloat(fields[6]);
 
-            Main.fermate.add(new Fermata(
-                    getComune(fields[0]),
-                    getProvincia(fields[1]),
-                    getRegione(fields[2]),
+            Comune comune = getComune(fields[0]);
+            Provincia provincia = getProvincia(fields[1]);
+            Regione regione = getRegione(fields[2]);
+
+            Fermata fermata = new Fermata(
+                    comune,
+                    provincia,
+                    regione,
                     fields[3],
                     Long.parseLong(fields[4]),
                     lon,
                     lat
-            ));
+            );
+
+            Main.fermate.add(fermata);
+            comune.getFermate().add(fermata);
+            if(!regione.getProvince().containsKey(provincia.nome)) regione.getProvince().put(provincia.nome, provincia);
+            if(!provincia.getComuni().containsKey(comune.nome)) provincia.getComuni().put(comune.nome, comune);
         }
     }
 
