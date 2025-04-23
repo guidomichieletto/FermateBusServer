@@ -5,11 +5,13 @@ import java.util.HashMap;
 public class Main {
     public static final String FILE_NAME = "file.csv";
     public static final int PORT = 3030;
+    public static final int PORT_WS = 3031;
     public static ArrayList<Fermata> fermate = new ArrayList<>();
     public static HashMap<String, Comune> comuni = new HashMap<>();
     public static HashMap<String, Provincia> province = new HashMap<>();
     public static HashMap<String, Regione> regioni = new HashMap<>();
     private static TCPServer server;
+    private static TCPServer serverWs;
 
     public static void main(String[] args) {
         importData();
@@ -29,5 +31,7 @@ public class Main {
     public static void startServer() {
         server = new TCPServer(PORT);
         server.start();
+        serverWs = new TCPServer(PORT_WS, true);
+        serverWs.start();
     }
 }
