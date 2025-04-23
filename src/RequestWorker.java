@@ -135,7 +135,25 @@ public class RequestWorker extends Thread {
     }
 
     private void queryStopsCoords() {
+        if(!request.has("radius") || !request.has("lon") || !request.has("lat")) {
+            System.out.println("Errore");
+            errorResponse("richiesta query non corretta: campo radius, lon o lat non presente");
+            return;
+        }
 
+        JSONArray list = new JSONArray();
+
+        double lat = request.getDouble("lat");
+        double lon = request.getDouble("lon");
+        double radius = request.getDouble("radius");
+        for(Fermata fermata : Main.fermate) {
+            if(fermata.calculateDistance(lat, lon) < radius) {
+                list.put(fermata.jsonObject());
+            }
+        }
+
+        response.put("response", "fermate");
+        response.put("list", list);
     }
 
     private HashMap<String, String> parseWhere() {
