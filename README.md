@@ -28,5 +28,7 @@ Di seguito le risposte possibili:
 | fermate / comuni / provincie / regioni | Ritorna una lista di oggetti a seguito di una richiesta query o query_stops_coords | {"inResponseTo": 1, "response": "fermate", "list": [{"nome": "Mestre Centro B1", "regione": "veneto", "provincia": "venezia", "comune": "venezia", "lat": 45.123354, "lon": 12.43342234}]} |
 | error                                  | Ritorna un errore causato da una richiesta fatta                                   | {"inResponseTo": 2, "response": "error", "description": "richiesta non valida"}                                                                                                            |
 
-## Supporto WebSocket
-Il server supporta anche il protocollo WebSocket, utile per la comunicazione con client web.
+## Istanze server
+Di default il server avvia due istanze server:
+1. TCP sulla porta 3030, protocollo descritto sopra,
+2. TCP sulla porta 3031, stesso protocollo del precedente con l'aggiunta del supporto per il WebSocket per le applicazioni web.
